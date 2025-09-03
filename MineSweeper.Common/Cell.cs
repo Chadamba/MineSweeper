@@ -10,7 +10,8 @@ namespace MineSweeper.Common
     {
         public bool IsOpen;
         public bool Flag;
-        public int MineCount;
+        public int MineCountAround;
         public bool IsMine;
+        
     }
 }

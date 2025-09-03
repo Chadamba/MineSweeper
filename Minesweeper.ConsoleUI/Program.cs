@@ -1,4 +1,5 @@
 ﻿using MineSweeper.Common;
+using System.Diagnostics;
 
 internal class Program
 {
@@ -6,10 +7,15 @@ internal class Program
     {
         var game = new Game();
         var size = new Size();
-        size.Width = 9;
-        size.Height = 9;
+        size.Width = 8;
+        size.Height = 8;
 
-        game.InitializeFeild(size, 5);
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        game.InitializeField(size, 8);
+        stopwatch.Stop();
+
+        Console.WriteLine(stopwatch.ElapsedTicks);
 
         for (int i = 0; i < size.Height; i++)
         {
@@ -18,7 +24,14 @@ internal class Program
                 var cell = game.Field[i, j];
                 if (cell.IsOpen)
                 {
-                    Console.Write(cell.MineCount);
+                    if (cell.IsMine)
+                    {
+                        Console.Write("*");
+                    }
+                    else
+                    {
+                        Console.Write(cell.MineCountAround);
+                    }
                 }
                 else
                 {
@@ -28,7 +41,7 @@ internal class Program
                     }
                     else
                     {
-                        Console.Write("X");
+                        Console.Write("[ ]");
                     }
                 }
                 Console.Write("\t");
