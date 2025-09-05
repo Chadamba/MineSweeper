@@ -39,6 +39,57 @@ namespace MineSweeper.Common
                     Field[x, y].IsMine = true;
                 }
             }
+
+            for (int y = 0; y < size.Height; y++)
+            {
+                for (int x = 0; x < size.Width; x++)
+                {
+                    var currentCell = Field[y, x];
+                    var mineCountAroundCell = 0;
+
+                    if (currentCell.IsMine)
+                    {
+                        continue;
+                    }
+                    if (y - 1 != -1 && Field[y - 1, x].IsMine)
+                    {
+                        mineCountAroundCell++;
+                    }
+                    if (y - 1 != -1 && x + 1 != size.Width && Field[y - 1, x + 1].IsMine)
+                    {
+                        mineCountAroundCell++;
+                    }
+                    if (x + 1 != size.Width && Field[y, x + 1].IsMine)
+                    {
+                        mineCountAroundCell++;
+                    }
+                    if (y + 1 != size.Height && x + 1 != size.Width && Field[y + 1, x + 1].IsMine)
+                    {
+                        mineCountAroundCell++;
+                    }
+                    if (y + 1 != size.Height && Field[y + 1, x].IsMine)
+                    {
+                        mineCountAroundCell++;
+                    }
+                    if (y + 1 != size.Height && x - 1 != -1 && Field[y + 1, x - 1].IsMine)
+                    {
+                        mineCountAroundCell++;
+                    }
+                    if (x - 1 != -1 && Field[y, x - 1].IsMine)
+                    {
+                        mineCountAroundCell++;
+                    }
+                    if (y - 1 != -1 && x - 1 != -1 && Field[y - 1, x - 1].IsMine)
+                    {
+                        mineCountAroundCell++;
+                    }
+
+                    currentCell.MineCountAround = mineCountAroundCell;
+
+                }
+            }
+
         }
+
     }
 }
