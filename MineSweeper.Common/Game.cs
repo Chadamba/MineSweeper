@@ -21,7 +21,6 @@ namespace MineSweeper.Common
                 for (int j = 0; j < size.Width; j++)
                 {
                     Field[i, j] = new Cell();
-                    Field[i, j].IsOpen = true;
                 }
             }
 

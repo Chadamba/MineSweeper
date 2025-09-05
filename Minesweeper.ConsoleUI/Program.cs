@@ -7,12 +7,12 @@ internal class Program
     {
         var game = new Game();
         var size = new Size();
-        size.Width = 8;
-        size.Height = 8;
+        size.Width = 19;
+        size.Height = 19;
 
         var stopwatch = new Stopwatch();
         stopwatch.Start();
-        game.InitializeField(size, 8);
+        game.InitializeField(size, 100);
 
         stopwatch.Stop();
 
@@ -20,37 +20,80 @@ internal class Program
         Console.WriteLine();
         var standardColor = Console.ForegroundColor;
 
-        for (int i = 0; i < size.Height; i++)
+        for (int i = 0; i < size.Height + 2; i++)
         {
-            for (int j = 0; j < size.Width; j++)
+            if (i == 0)
             {
-                var cell = game.Field[i, j];
-                if (cell.IsOpen)
+                for (int j = 0; j < size.Width; j++)
                 {
-                    if (!cell.IsMine)
+                    Console.Write("---");
+                }
+            }
+            else if (i == size.Height + 1)
+            {
+                for (int j = 0; j < size.Width; j++)
+                {
+                    Console.Write("---");
+                }
+            }
+            else
+            {
+                for (int j = 0; j < size.Width; j++)
+                {
+
+                    var cell = game.Field[i - 1, j];
+                    if (cell.IsOpen)
                     {
-                        Console.Write($"|");
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write($"{cell.MineCountAround}");
-                        Console.ForegroundColor = standardColor;
-                        Console.Write($"|");
+                        if (!cell.IsMine)
+                        {
+                            if (cell.MineCountAround != 0)
+                            {
+                                Console.Write($"|");
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write($"{cell.MineCountAround}");
+                                Console.ForegroundColor = standardColor;
+                                Console.Write($"|");
+                            }
+                            else
+                            {
+                                Console.Write($"|0|");
+
+                            }
+                        }
+                        else
+                        {
+                            Console.Write($"|");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("X");
+                            Console.ForegroundColor = standardColor;
+                            Console.Write($"|");
+                        }
                     }
                     else
                     {
-                        Console.Write($"|");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("X");
-                        Console.ForegroundColor = standardColor;
-                        Console.Write($"|");
-                    }
-                }
-                else
-                {
-                    Console.Write("[?]");
-                }
+                        if (cell.Flag)
+                        {
+                            Console.Write($"|");
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.Write("P");
+                            Console.ForegroundColor = standardColor;
+                            Console.Write($"|");
+                        }
+                        else
+                        {
+                            Console.Write($"|");
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.Write("?");
+                            Console.ForegroundColor = standardColor;
+                            Console.Write($"|");
+                        }
 
-                Console.Write("");
+                    }
+
+                    Console.Write("");
+                }
             }
+
             Console.WriteLine();
 
         }
