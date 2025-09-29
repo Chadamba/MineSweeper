@@ -12,6 +12,5 @@ namespace MineSweeper.Common
         public bool Flag;
         public int MineCountAround;
         public bool IsMine;
-        
     }
 }
