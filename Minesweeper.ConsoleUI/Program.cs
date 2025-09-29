@@ -7,67 +7,19 @@ internal class Program
     {
         var game = new Game();
         var size = new Size();
-        size.Width = 8;
-        size.Height = 8;
+        size.Width = 19;
+        size.Height = 19;
 
-        game.InitializeField(size, 10);
+        var stopwatch = new Stopwatch();
+        stopwatch.Start();
+        game.InitializeField(size, 100);
 
-        int xGame = 0;
-        int yGame = 0;
-        ConsoleKey? key = null;
-        Console.Clear();
+        stopwatch.Stop();
 
-        while (key != ConsoleKey.Escape)
-        {
-            Console.Clear();
+        Console.WriteLine(stopwatch.ElapsedTicks);
+        Console.WriteLine();
+        var standardColor = Console.ForegroundColor;
 
-            DrawGameField(game, size);
-            switch (key)
-            {
-                case ConsoleKey.RightArrow:
-                    var nextRight = xGame + 1;
-                    if (size.Width > nextRight)
-                    {
-                        ++xGame;
-                    }
-                    break;
-                case ConsoleKey.DownArrow:
-                    var nextDown = yGame + 1;
-                    if (size.Height > nextDown)
-                    {
-                        ++yGame;
-                    }
-                    break;
-                case ConsoleKey.LeftArrow:
-                    var nextLeft = xGame - 1;
-                    if (0 <= nextLeft)
-                    {
-                        --xGame;
-                    }
-                    break;
-                case ConsoleKey.UpArrow:
-                    var nextUp = yGame - 1;
-                    if (0 <= nextUp)
-                    {
-                        --yGame;
-                    }
-                    break;
-                case ConsoleKey.Spacebar:
-                    game.OpenCell(xGame, yGame);
-                    break;
-                case ConsoleKey.Enter:
-                    game.SetFlag(xGame, yGame);
-                    break;
-                default:
-                    break;
-            }
-            DrawCell(xGame, yGame, game.Field[yGame, xGame], true);
-            key = Console.ReadKey(true).Key;
-        }
-    }
-
-    private static void DrawGameField(Game game, Size size)
-    {
         for (int i = 0; i < size.Height + 2; i++)
         {
             if (i == 0)
@@ -88,80 +40,79 @@ internal class Program
             {
                 for (int j = 0; j < size.Width; j++)
                 {
+
                     var cell = game.Field[i - 1, j];
-                    DrawCell(j, i - 1, cell);
+                    if (cell.IsOpen)
+                    {
+                        if (!cell.IsMine)
+                        {
+                            if (cell.MineCountAround != 0)
+                            {
+                                Console.Write($"|");
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.Write($"{cell.MineCountAround}");
+                                Console.ForegroundColor = standardColor;
+                                Console.Write($"|");
+                            }
+                            else
+                            {
+                                Console.Write($"|0|");
+
+                            }
+                        }
+                        else
+                        {
+                            Console.Write($"|");
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.Write("X");
+                            Console.ForegroundColor = standardColor;
+                            Console.Write($"|");
+                        }
+                    }
+                    else
+                    {
+                        if (cell.Flag)
+                        {
+                            Console.Write($"|");
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.Write("P");
+                            Console.ForegroundColor = standardColor;
+                            Console.Write($"|");
+                        }
+                        else
+                        {
+                            Console.Write($"|");
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.Write("?");
+                            Console.ForegroundColor = standardColor;
+                            Console.Write($"|");
+                        }
+
+                    }
+
+                    Console.Write("");
                 }
             }
+
             Console.WriteLine();
+
         }
-        Console.WriteLine();
+        Console.ReadKey(true);
     }
 
-    private static (int AbsX, int AbsY) ConvertToAbs(int x, int y)
-    {
-        return (x * 3, y + 1);
-    }
 
-    private static void DrawCell(int x, int y, Cell cell, bool isSelected = false)
+    /*public void WalkingOnField(ConsoleKey key)
     {
-        var (absX, absY) = ConvertToAbs(x, y);
-        Console.SetCursorPosition(absX, absY);
-
-        Console.ForegroundColor = isSelected ? ConsoleColor.Green : ConsoleColor.White;
-        Console.Write($"|");
-        Console.ForegroundColor = ConsoleColor.White;
-        if (cell.IsOpen)
+        while ((key = Console.ReadKey(true).Key) != ConsoleKey.Enter)
         {
-            if (!cell.IsMine)
+            switch (key)
             {
-                WriteNumber(cell.MineCountAround);
-            }
-            else
-            {
-                WriteMine();
-            }
-        }
-        else
-        {
-            if (cell.Flag)
-            {
-                WriteFlag();
-            }
-            else
-            {
-                WriteClosedCell();
+                case ConsoleKey.W: break;
+                case ConsoleKey.S: break;
+                case ConsoleKey.D: break;
+                case ConsoleKey.A: break;
             }
         }
-        Console.ForegroundColor = isSelected ? ConsoleColor.Green : ConsoleColor.White;
-        Console.Write($"|");
-        Console.ForegroundColor = ConsoleColor.White;
-    }
 
-    private static void WriteMine()
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.Write("X");
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    private static void WriteFlag()
-    {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.Write("!");
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    private static void WriteNumber(int mineCountAround)
-    {
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.Write($"{mineCountAround}");
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-
-    private static void WriteClosedCell()
-    {
-        Console.ForegroundColor = ConsoleColor.Blue;
-        Console.Write("?");
-        Console.ForegroundColor = ConsoleColor.White;
-    }
+    }*/
 }

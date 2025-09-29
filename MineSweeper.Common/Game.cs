@@ -13,13 +13,14 @@ namespace MineSweeper.Common
 
         public void InitializeField(Size size, int mineCount)
         {
+
             Field = new Cell[size.Height, size.Width];
+
             for (int i = 0; i < size.Height; i++)
             {
                 for (int j = 0; j < size.Width; j++)
                 {
                     Field[i, j] = new Cell();
-                    //Field[i, j].IsOpen = true;
                 }
             }
 
@@ -88,30 +89,6 @@ namespace MineSweeper.Common
             }
 
         }
-        public Result OpenCell(int x, int y)
-        {
-            var cell = Field[y, x];
-            if (cell.IsOpen)
-            {
-                return Result.YetIsOpen;
-            }
-            if (cell.Flag)
-            {
-                return Result.HesFlag;
-            }
-            if (cell.IsMine)
-            {
-                cell.IsOpen = true;
-                return Result.Mine;
-            }
-            cell.IsOpen = true;
-            return Result.NotMine;
-        }
 
-        public void SetFlag(int x, int y)
-        {
-            var cell = Field[y, x];
-            cell.Flag = true;
-        }
     }
 }
